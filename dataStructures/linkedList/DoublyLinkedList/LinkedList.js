@@ -4,6 +4,7 @@ class LinkedList {
     constructor() {
         this.head = null;
         this.tail = null;
+        this.length = 0;
     }
 
     getHead() {
@@ -16,6 +17,8 @@ class LinkedList {
 
     insertAtTail(value) {
         const node = new Node(value);
+        this.length++;
+
         node.previousElement = this.tail;
 
         if(this.tail !== null) {
@@ -33,6 +36,7 @@ class LinkedList {
 
     insertAtHead(value) {
         const node = new Node(value);
+        this.length++;
 
         if(this.head !== null) {
             this.head.previousElement = node;
@@ -50,12 +54,14 @@ class LinkedList {
 
     removeAtHead() {
         if(this.head === null) {
-            return false;
+            return null;
         }
 
-        if(this.head.data === this.tail.data) {
+        this.length--;
+        if(this.head === this.tail) {
+            const data = this.head.data;
             this.head = this.tail = null;
-            return true;
+            return data;
         }
 
         const currNode = this.head;
@@ -63,48 +69,53 @@ class LinkedList {
         this.head.previousElement = null;
         currNode.nextElement = null;
 
-        return true;
+        return currNode.data;
     }
 
     removeAtTail() {
         if(this.tail === null) {
-            return false;
+            return null;
         }
 
-        if(this.head.data === this.tail.data) {
+        this.length--;
+        if(this.head === this.tail) {
+            const data = this.head.data;
             this.head = this.tail = null;
-            return true;
+            return data;
         }
 
         const currNode = this.tail;
         this.tail = currNode.previousElement;
         this.tail.nextElement = null;
         currNode.previousElement = null;
-        return true;
+        return currNode.data;
     }
 
     removeNodeWithValue(value) {
         if(this.head === null) {
-            return false;
+            return null;
         }
 
-        if(this.head.data === value && this.tail.data === value) {
+        if(this.head.data === value && this.tail.data === value && this.head === this.tail) {
+            this.length--;
             this.head = this.tail = null;
-            return true;
+            return value;
         }
 
         if(this.tail.data === value) {
+            this.length--;
             this.tail = this.tail.previousElement;
             this.tail.nextElement.previousElement = null;
             this.tail.nextElement = null;
-            return true;
+            return value;
         }
 
         if(this.head.data === value) {
+            this.length--;
             this.head = this.head.nextElement;
             this.head.previousElement.nextElement = null;
             this.head.previousElement = null;
-            return true;
+            return value;
         }
 
         let currNode = this.head;
@@ -114,13 +125,14 @@ class LinkedList {
         }
 
         if(currNode !== null) {
+            this.length--;
             currNode.previousElement.nextElement = currNode.nextElement;
             currNode.nextElement.previousElement = currNode.previousElement;
             currNode.previousElement = null;
             currNode.nextElement = null;
-            return true;
+            return value;
         }
-        return false;
+        return null;
     }
 
     search(value) {
@@ -162,12 +174,14 @@ class LinkedList {
 // linkedList.insertAtHead(1);
 
 // linkedList.removeAtTail();
-// linkedList.removeAtTail();
+// console.log("Removing 3", linkedList.removeAtTail());
 // linkedList.removeAtHead();
 // linkedList.removeAtHead();
 // linkedList.removeNodeWithValue(3);
-// linkedList.removeNodeWithValue(2);
+// console.log("Removing 2",linkedList.removeNodeWithValue(2));
 // linkedList.removeNodeWithValue(1);
 
 // linkedList.print()
 // linkedList.printReverse()
+
+module.exports = LinkedList
