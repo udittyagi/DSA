@@ -4,6 +4,7 @@ class LinkedList {
     constructor() {
         this.head = null;
         this.tail = null;
+        this.length = 0;
     }
 
     getHead() {
@@ -16,6 +17,7 @@ class LinkedList {
 
     insertAtTail(value) {
         const node = new Node(value);
+        this.length++;
         if(this.head === null) {
             this.head = this.tail = node;
             return node;
@@ -27,6 +29,7 @@ class LinkedList {
 
     insertAtHead(value) {
         const node = new Node(value);
+        this.length++;
         if(this.head === null) {
             this.head = this.tail = node;
             return node;
@@ -40,31 +43,37 @@ class LinkedList {
         const currNode = this.getHead();
 
         if(!currNode) {
-            return false
+            return null
         }
 
+        this.length--;
+
         //In case of last node
-        if(this.tail.data == this.head.data) {
+        if(this.tail == this.head) {
+            const data = this.tail.data;
             this.tail = this.head = null;
-            return true;
+            return data;
         }
 
         this.head = currNode.nextElement;
         currNode.nextElement = null;
-        return true
+        return currNode.data;
     }
 
     removeAtTail() {
         let currNode = this.getHead();
 
         if(!currNode) {
-            return false;
+            return null;
         }
 
+        this.length--;
+
         //In case of last node
-        if(this.tail.data == this.head.data) {
+        if(this.tail == this.head) {
+            const data = this.tail.data;
             this.tail = this.head = null;
-            return true;
+            return data;
         }
 
         while(currNode?.nextElement?.nextElement) {
@@ -72,25 +81,29 @@ class LinkedList {
         }
 
         this.tail = currNode;
+
+        const deletedData = currNode.nextElement.data;
         currNode.nextElement = null;
-        return true
+        return deletedData
     }
 
     removeNodeWithValue(value) {
         let currNode = this.getHead();
         if(!currNode) {
-            return false;
+            return null;
         }
 
-        if(this.head.data === value && this.tail.data === value) {
+        if(this.head.data === value && this.tail.data === value && this.tail === this.head) {
+            this.length--;
             this.head = this.tail = null;
-            return true;
+            return value;
         }
 
         if(this.head.data === value) {
+            this.length--;
             this.head = currNode.nextElement;
             currNode.nextElement = null;
-            return true;
+            return value;
         }
 
         while(currNode.nextElement && currNode.nextElement.data !== value) {
@@ -99,6 +112,7 @@ class LinkedList {
 
         
         if(currNode.nextElement && currNode.nextElement.data === value) {
+            this.length--;
             const nextToNextElement = currNode.nextElement.nextElement;
             currNode.nextElement.nextElement = null;
             currNode.nextElement = nextToNextElement;
@@ -107,10 +121,10 @@ class LinkedList {
                 this.tail = currNode;
             }
 
-            return true;
+            return value;
         }
 
-        return false;
+        return null;
     }
 
     search(value) {
@@ -142,19 +156,22 @@ class LinkedList {
 // const linkedList = new LinkedList();
 
 // linkedList.insertAtTail(3);
-// linkedList.insertAtTail(4);
+// linkedList.insertAtTail(1);
 // linkedList.insertAtHead(2);
 // linkedList.insertAtHead(1);
 
+// console.log("Removing 1", linkedList.removeAtHead())
 // linkedList.removeAtHead()
-// linkedList.removeAtHead()
+// console.log('Removing 2', linkedList.removeNodeWithValue(8))
 // linkedList.removeAtHead()
 // linkedList.removeAtHead();
-// linkedList.removeAtTail()
+// console.log("Removing 4", linkedList.removeAtTail())
+// console.log("Removing 5", linkedList.removeAtTail())
+// console.log("Removing 6", linkedList.removeAtHead())
 // linkedList.removeAtTail()
 // linkedList.removeAtTail()
 
-// linkedList.removeNodeWithValue(2);
+// linkedList.removeNodeWithValue(1);
 // linkedList.removeNodeWithValue(3);
 // linkedList.removeNodeWithValue(1);
 // linkedList.removeNodeWithValue(4);
