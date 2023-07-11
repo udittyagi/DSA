@@ -1,15 +1,6 @@
 const Node = require('../Node/Node');
 const utils = require('./utils/utils');
 
-/**
- * AVL Trees are Balanced BST Tree
- * A balanced tree is where for ever node n ->  | height(left subtree of n) - height(right subtree of n) | <= 0
- * Height of leaf is considered 0
- * Height of null node is considered -1
- * 
- * https://www.geeksforgeeks.org/introduction-to-avl-tree/
- */
-
 class AVLTree {
     constructor() {
         this.root = null;
@@ -65,7 +56,6 @@ class AVLTree {
     }
 
     _insertNode(currNode, value) {
-        //1. Insert the node same as in BST
         // While inserting we move down the tree due to recursion
         if(currNode === null) {
             currNode = new Node(value);
@@ -82,38 +72,11 @@ class AVLTree {
         }
 
         currNode.height = Math.max(utils.height(currNode.leftElement), utils.height(currNode.rightElement)) + 1;
-        //2. We will check the balance factor
-        //Now the recusrion for any stage completed, so we start moving up one by one in recursion
+
+        //Now the recursion for any stage completed, so we start moving up one by one in recursion
         const balanceFactor = utils.getBalanceFactor(currNode);
 
         // console.log('balance Factor+++', {data: currNode.data, balanceFactor, height: currNode.height, value: value, parent: currNode.parent?.data})
-
-        /**
-         * There arise 4 cases of roatation
-         * left-left ==> When new Node (C) is added in the left subtree of a node (P), 
-         *              which in turn is in the leftSubtree of currNode (G) ==> Right Rotation around G
-         * 
-         * left-right ==> When new Node (C) is added in the right subtree of a node (P) which,
-         *               in turn is in the leftSubtree of currNode (G) ==> First Left around node around P, then right roataion around G
-         * 
-         * right-right ==> When new Node (C) is added in the right subtree of a node (P),
-         *               which in turn is in the rightSubtree of currNode (G) ==> Left rotation around G
-         * 
-         * right-left ==> When new Node (C) is added in the left subtree of a node (P),
-         *               which in turn is in the rightSubtree of currNode (G) ==> Right Rotation around P, then left roation around G
-         * 
-         * It is for sure the tree will become unbalanced at G only (if it become unbalanced) not before that.
-         */
-
-        //Balance factor is leftSubtreeHeight - RightSubtreeHeight ==> For balanced tree it should always be in set of {-1, 0, 1}
-
-        /**
-         * If balance factor greater than 1 then it means new Node is added in leftSubTree of currNode
-         * If balance factor less than -1 then it means new Node is added in rightSubtree of currNode
-         * 
-         * This gives us the first of left-* / right-* of rotation
-         * To get the second we can simply compare the value of new Node with the value of P node (right of left subtree root value of currNode)
-         */
 
         if(balanceFactor > 1) {
             if(value < currNode?.leftElement?.data) {
