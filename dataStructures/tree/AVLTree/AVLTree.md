@@ -6,7 +6,8 @@
 - [Balanced Binary Tree](#balanced-binary-tree)
 - [Insertion](#insertion)
     - [Insertion Approach](#insertion-approach)
-- Deletion
+- [Deletion](#deletion)
+  - [Deletion Approach](#deletion-approach)
 
 ## Introduction
 
@@ -148,4 +149,43 @@ The recursive code itself travels up and visits all the ancestors of the newly i
 Note:
 (left subtree height – right subtree height) > 0 then left subtree height is more
 (left subtree height – right subtree height) < 0 then right subtree height is more
+```
+
+## Deletion
+
+We have to change the normal BST deletion so that the tree remain balanced after the deletion.
+
+#### Steps to follow in deletion
+
+```
+Let N be the node to be deleted 
+
+- Perform standard BST delete for N.
+- Starting from N, travel up and find the first unbalanced node.
+  Let z be the first unbalanced node, y be the larger height child of z, and x be the larger height child of y.
+  Note that the definitions of x and y are different from insertion here.
+- Re-balance the tree by performing appropriate rotations on the subtree rooted with z.
+  There can be 4 possible cases that needs to be handled as x, y and z can be arranged in 4 ways.
+  Following are the possible 4 arrangements:
+  - y is left child of z and x is left child of y (Left Left Case)
+  - y is left child of z and x is right child of y (Left Right Case) 
+  - y is right child of z and x is right child of y (Right Right Case) 
+  - y is right child of z and x is left child of y (Right Left Case)
+```
+
+==Like insertion, following are the operations to be performed in above mentioned 4 cases. Note that, unlike insertion, fixing the node z won’t fix the complete AVL tree. After fixing z, we may have to fix ancestors of z as well==
+
+#### Deletion Approach
+
+```
+- Perform the normal BST deletion. 
+- The current node must be one of the ancestors of the deleted node.
+  Update the height of the current node.
+- Get the balance factor (left subtree height – right subtree height) of the current node.
+- If balance factor is greater than 1, then the current node is unbalanced and we are either in Left Left case or Left Right case.
+  To check whether it is Left Left case or Left Right case, get the balance factor of left subtree.
+  If balance factor of the left subtree is greater than or equal to 0, then it is Left Left case, else Left Right case. 
+- If balance factor is less than -1, then the current node is unbalanced and we are either in Right Right case or Right Left case.
+  To check whether it is Right Right case or Right Left case, get the balance factor of right subtree.
+  If the balance factor of the right subtree is smaller than or equal to 0, then it is Right Right case, else Right Left case.
 ```

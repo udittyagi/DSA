@@ -1,6 +1,6 @@
 function getBalanceFactor(node) {
     if(node === null) {
-        return -1;
+        return 0;
     }
     return height(node.leftElement) - height(node.rightElement)
 }

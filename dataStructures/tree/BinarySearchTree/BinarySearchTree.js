@@ -21,9 +21,65 @@ class BinarySearchTree {
         }
         return currNode;
     }
+    
     insert(value) {
         this.root = this._insertBST(this.root, value, null)   
         this.root.parent = null;     
+    }
+
+    _deleteBST(currNode, value) {
+        if(currNode !== null) {
+            if(value < currNode.data) {
+                const leftNode = this.deleteNode(currNode.leftElement, value);
+                if(leftNode) {
+                    leftNode.parent = currNode;
+                }
+                currNode.leftElement = leftNode
+            } else if(value > currNode.data) {
+                const rightNode = this.deleteNode(currNode.rightElement, value);
+                if(rightNode) {
+                    rightNode.parent = currNode;
+                }
+                currNode.rightElement = rightNode;
+            } else {
+                //If node found
+                if(currNode.leftElement === null && currNode.rightElement === null) {
+                    // Case 1 => If leaf node
+                    currNode.parent = null;
+                    currNode = null;
+                } else if (currNode.rightElement === null) {
+                    // case 2 ==> If left child is not null
+                    const temp = currNode.leftElement;
+                    currNode.parent = null;
+                    currNode.leftElement = null;
+                    currNode = temp;
+                } else if (currNode.leftElement === null) {
+                    // case 2 ==> If right child is not null
+                    const temp = currNode.rightElement;
+                    currNode.parent = null;
+                    currNode.rightElement = null;
+                    currNode = temp;
+                } else {
+                    //Both childs are present
+                    //We need to find the best value to replace this node
+                    //which either can be smallest (leftmost) value in right subtree or largest(rightmost) value in left subtree.
+                    let replacementNode = currNode.rightElement;
+                    while(replacementNode.leftElement !== null) {
+                        replacementNode = replacementNode.leftElement;
+                    }
+                    currNode.data = replacementNode.data;
+                    currNode.rightElement = this.deleteNode(currNode.rightElement, replacementNode.data);
+                    if(currNode.rightElement !== null) {
+                        currNode.rightElement.parent = currNode
+                    }
+                }
+            }
+        }
+        return currNode;
+    }
+
+    delete(value) {
+        this.root = this._deleteBST(this.root, value)
     }
 
     _inOrder(currNode) {
@@ -57,88 +113,6 @@ class BinarySearchTree {
 
     preOrder() {
         this._preOrder(this.root)
-    }
-
-    delete(value) {
-        let currNode = this.root;
-
-        //1. When root is null;
-        if(currNode === null) {
-            return false;
-        }
-
-        //Search node to delete
-        // let parent; ==> We have created a parent pointer
-        
-        while(currNode !== null && currNode.data !== value) {
-            // parent = currNode;
-            if(value < currNode.data) {
-                currNode = currNode.leftElement;
-            } else {
-                currNode = currNode.rightElement;
-            }
-        }
-
-        if(currNode === null) {
-            return false;
-        }
-        //2. When the node to delete is leaf node; ==> Simply delete it
-        if(currNode.leftElement === null && currNode.rightElement === null) {
-            const parentNode = currNode.parent;
-            currNode.parent = null;
-
-            if(this.root.data === value) {
-                this.root = null
-            } else if(value < parentNode.data) {
-                parentNode.leftElement = null;
-            } else {
-                parentNode.rightElement = null;
-            }
-        }
-        //3. When the node to delete have only left child;
-        else if(currNode.rightElement === null) {
-            const parentNode = currNode.parent;
-            currNode.parent = null;
-            if(this.root.data === value) {
-                this.root = currNode.leftElement;
-                this.root.parent = null;
-                return true;
-            } else if(value < parentNode.data) {
-                parentNode.leftElement = currNode.leftElement;
-            } else {
-                parentNode.rightElement = currNode.leftElement;
-            }
-            currNode.leftElement.parent = parentNode;
-            currNode.leftElement = null;
-        }
-        //4. When the node to delete have only right child;
-        else if(currNode.leftElement === null) {
-            const parentNode = currNode.parent;
-            currNode.parent = null;
-            if(this.root.data === value) {
-                this.root = currNode.rightElement;
-                this.root.parent = null;
-                return true;
-            } else if(value < parentNode.data) {
-                parentNode.leftElement = currNode.rightElement;
-            } else {
-                parentNode.rightElement = currNode.rightElement;
-            }
-            currNode.rightElement.parent = parentNode;
-            currNode.rightElement = null;
-        }
-        //5. When the node to delete have both the child; (We need to find the best value to replace this node
-        // which either can be smallest (leftmost) value in right subtree or largest(rightmost) value in left subtree).
-        else {
-            let replaceNode = currNode.rightElement;
-            while(replaceNode.leftElement !== null) {
-                replaceNode = replaceNode.leftElement;
-            }
-            const temp = replaceNode.data;
-            this.delete(temp)
-            currNode.data = temp
-        }
-        return true;
     }
 
     nodeHeight(node) {
@@ -175,9 +149,11 @@ BST.insert(11);
 // BST.insert(2);
 
 
-// BST.delete(5)
+BST.delete(1)
 // console.log('Root++', BST.root);
 
 // console.log("Height", BST.height())
 
 BST.preOrder()
+console.log("++++++++++++++")
+BST.inOrder()
