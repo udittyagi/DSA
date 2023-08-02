@@ -30,13 +30,13 @@ class BinarySearchTree {
     _deleteBST(currNode, value) {
         if(currNode !== null) {
             if(value < currNode.data) {
-                const leftNode = this.deleteNode(currNode.leftElement, value);
+                const leftNode = this._deleteBST(currNode.leftElement, value);
                 if(leftNode) {
                     leftNode.parent = currNode;
                 }
                 currNode.leftElement = leftNode
             } else if(value > currNode.data) {
-                const rightNode = this.deleteNode(currNode.rightElement, value);
+                const rightNode = this._deleteBST(currNode.rightElement, value);
                 if(rightNode) {
                     rightNode.parent = currNode;
                 }
@@ -68,7 +68,7 @@ class BinarySearchTree {
                         replacementNode = replacementNode.leftElement;
                     }
                     currNode.data = replacementNode.data;
-                    currNode.rightElement = this.deleteNode(currNode.rightElement, replacementNode.data);
+                    currNode.rightElement = this._deleteBST(currNode.rightElement, replacementNode.data);
                     if(currNode.rightElement !== null) {
                         currNode.rightElement.parent = currNode
                     }

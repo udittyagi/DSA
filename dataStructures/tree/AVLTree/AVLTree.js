@@ -1,5 +1,5 @@
 const Node = require('../Node/Node');
-const utils = require('./utils/utils');
+const utils = require('../utils/utils');
 
 class AVLTree {
     constructor() {
