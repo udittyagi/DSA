@@ -8,5 +8,5 @@
     - Graph
     - Tree
         - Binary Search Tree
-        - [AVL Tree](https://github.com/udittyagi/DSA/blob/DS_Trees/dataStructures/tree/AVLTree/Readme.md)
+        - [AVL Tree](https://github.com/udittyagi/DSA/blob/main/dataStructures/tree/AVLTree/AVLTree.md)
         - Red Black Tree
